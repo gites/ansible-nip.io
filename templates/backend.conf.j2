@@ -1,0 +1,29 @@
+# {{ ansible_managed }}
+
+[main]
+# main domain
+domain={{ item }}
+
+# default ttl
+ttl={{ nip_ttl }}
+
+# default IP address for non-wildcard entries
+ipaddress={{ nip_default_ipaddr }}
+
+# SOA
+[soa]
+# serial number
+id=1
+
+# Hostmaster email address
+hostmaster={{ nip_hostmaster }}
+
+# Name server
+ns={{ nip_ns }}
+
+# nameservers
+[nameservers]
+{% for n in nip_nameservers %}
+{{ n }}
+{% endfor %}
+

@@ -1,0 +1,31 @@
+---
+- name: create target dir
+  file:
+    path: "{{ nip_dir }}/{{ item }}"
+    state: directory
+  with_flattened:
+    - src
+    - "{{ nip_domains }}"
+
+- name: get nip.io release
+  get_url:
+    url: "{{ nip_repo }}/archive/{{ nip_tag }}.tar.gz"
+    dest: "{{ nip_dir }}/src/{{ nip_tag }}.tar.gz"
+
+# extra_opts with strip-components is broken in unarchive
+- name: unpack nip.io
+  shell: >-
+    tar zxf "{{ nip_dir }}/src/{{ nip_tag }}.tar.gz"
+    -C "{{ nip_dir }}/{{ item }}"
+    --strip-components 2 nip.io-1.0/src/backend.py
+  args:
+    creates: "{{ nip_dir }}/{{ item }}/backend.py"
+  with_items:
+    - "{{ nip_domains }}"
+
+- name: configure wildcard domains
+  template:
+    src: backend.conf.j2
+    dest: "{{ nip_dir }}/{{ item }}/backend.conf"
+  with_items:
+    - "{{ nip_domains }}"

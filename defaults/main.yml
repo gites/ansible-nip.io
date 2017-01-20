@@ -1,0 +1,16 @@
+---
+# defaults file for nip.io role
+#
+
+nip_repo: https://github.com/gites/nip.io
+nip_tag: v1.0
+nip_domains:
+  - woop.sh
+nip_dir: /opt/nip.io
+nip_ttl: 432000
+nip_default_ipaddr: 127.0.0.1
+nip_hostmaster: hostmaster@{{ item }}
+nip_ns: ns1.{{ item }}        
+nip_nameservers:
+  - ns1.{{ item }}=127.0.0.1
+  - ns2.{{ item }}=127.0.0.1
